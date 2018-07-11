@@ -1,0 +1,87 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+/*음의 가중치를 가지고 있는 edge가 있으므로 벨만-포드 알고리즘을 이용해야합니다. 
+1에서 출발했을 때 도달할 수 있는 음의 cycle이 있다면 반드시 시간역행을 할 수 있음을 감안해 코드를 만들어야합니다.*/
+
+class Edge {
+	int source, dest, weight;
+
+	public Edge(int source, int dest, int weight) {
+		super();
+		this.source = source;
+		this.dest = dest;
+		this.weight = weight;
+	}
+}
+
+class Main {
+
+	static int N, M, W;
+	static int dist[];
+	static Vector<Edge> edge;
+	static final int INF = 1000000000;
+
+	public static boolean BellmanFord() {
+
+		Arrays.fill(dist, INF);
+		dist[1] = 0;
+
+		for (int i = 0; i < N; i++) {
+			for (Edge e : edge) {
+				if (dist[e.dest] > dist[e.source] + e.weight) {
+					dist[e.dest] = dist[e.source] + e.weight;
+				}
+			}
+		}
+		for (Edge e : edge) {
+			if (dist[e.dest] > dist[e.source] + e.weight) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+
+		for (int testcase = 0; testcase < T; testcase++) {
+			StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+			W = Integer.parseInt(st.nextToken());
+			dist = new int[N + 1];
+			edge = new Vector<Edge>();
+
+			for (int i = 0; i < M; i++) {
+				st = new StringTokenizer(br.readLine(), " ");
+				int start = Integer.parseInt(st.nextToken());
+				int end = Integer.parseInt(st.nextToken());
+				int weight = Integer.parseInt(st.nextToken());
+
+				edge.add(new Edge(start, end, weight));
+				edge.add(new Edge(end, start, weight));
+			}
+
+			for (int i = 0; i < W; i++) {
+				st = new StringTokenizer(br.readLine(), " ");
+				int start = Integer.parseInt(st.nextToken());
+				int end = Integer.parseInt(st.nextToken());
+				int weight = Integer.parseInt(st.nextToken());
+
+				edge.add(new Edge(start, end, -weight));
+			}
+
+			if (BellmanFord())
+				System.out.println("NO");
+			else
+				System.out.println("YES");
+
+		}
+	}
+}

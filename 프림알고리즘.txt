@@ -1,0 +1,84 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Scanner;
+
+class Elements implements Comparable<Elements>{
+	int u,v,d;
+	Elements(int u,int v, int d){
+		this.u=u;
+		this.v=v;
+		this.d=d;
+	}
+	public int compareTo(Elements e){
+		return e.d >= d ? -1 : 1;
+	}
+}
+
+public class Main {
+
+	static int N,M,t;
+	static ArrayList<Elements> arr[];
+	static Boolean Visited[];
+	
+	public static long PrimMST(int start){
+		long ans =0;
+		int T=0;
+		PriorityQueue<Elements> pq = new PriorityQueue<Elements>();
+		
+		for(Elements e : arr[start]){
+			pq.offer(e);	
+		}
+		Visited[start]=true;
+		
+		while(!pq.isEmpty()){
+			int next = pq.peek().v;
+			int distance = pq.peek().d;
+			pq.poll();
+			
+			if(Visited[next]==true)
+				continue;
+			
+			ans+=distance+(T*t);
+			
+			for(Elements e : arr[next]){
+				if(Visited[e.v]==false)
+					pq.offer(e);	
+			}	
+	
+			Visited[next]=true;
+			++T;
+		}
+		return ans;
+		
+	}
+    public static void main(String[] args) throws Exception {
+    	int i;
+    	Scanner sc= new Scanner(System.in);
+    	N = sc.nextInt();
+    	M = sc.nextInt();
+    	t = sc.nextInt();
+    	
+    	arr = new ArrayList[N+1];
+    	Visited = new Boolean[N+1];
+    	
+    	Arrays.fill(Visited, false);
+    	    	
+    	for(i=1;i<=N;i++){
+    		arr[i] = new ArrayList<Elements>();
+    	}
+    	
+    	for(i=0;i<M;i++){
+    		int u = sc.nextInt();
+    		int v = sc.nextInt();
+    		int d = sc.nextInt();
+    		
+    		arr[u].add(new Elements(u,v,d));
+    		arr[v].add(new Elements(v,u,d));
+    	}
+    	
+    	System.out.println(PrimMST(1));	
+    }
+}

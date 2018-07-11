@@ -1,0 +1,30 @@
+import java.io.IOException;
+
+//http://oniondev.egloos.com/9839582 참고
+//http://blog.khphub.com/42
+
+// 원소 포함 여부 확인(특정 원소가 true인지 확인)
+// set 의 p번째 원소가 true인지 확인
+// set & (1<< p) 이 값이 0이 아니면 p번째 원소는 true 입니다.
+
+// 원소 추가
+// set 의 p 번째 원소를 true로 바꿉니다.
+// set |= (1<<p)
+
+
+public class Main {
+
+	public static void main(String[] args) throws IOException {
+
+		int Origin_bit = 21;
+		String O = Integer.toBinaryString(Origin_bit);
+		System.out.println("origin  : " +  O);
+		
+		int pos = 4;	//오른쪽 비트 0 index를 시작으로 카운트
+		
+		Origin_bit = Origin_bit ^ (1 << pos);
+		String T = Integer.toBinaryString(Origin_bit);
+		System.out.println("Toggle : " + T);
+
+	}
+}

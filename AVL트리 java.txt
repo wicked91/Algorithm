@@ -1,0 +1,134 @@
+import java.util.Scanner;
+import java.util.Queue;
+import java.util.LinkedList;
+class Node{
+	int Num;
+	Node left;
+	Node right;
+	Node(int Num){
+		this.Num=Num;
+		this.left=null;
+		this.right=null;
+	}
+}
+
+public class BinarySearchTree_2957 {
+
+	static int N;
+	static int Cnt=0;
+	static Node n[];
+	static Node root;
+	static int arr[];
+	
+	public static void print(Node n){	// BFS과정으로 출력
+		
+		Queue<Node> q = new LinkedList<Node>();
+		q.offer(n);
+		
+		while(!q.isEmpty()){
+			if(q.peek().left!=null)
+				q.offer(q.peek().left);
+			if(q.peek().right!=null)
+				q.offer(q.peek().right);
+			System.out.print(q.poll().Num+" ");
+		}		
+	}
+	
+	public static int get_height(Node n){
+		int height=0;
+		if(n!=null){
+			height = 1+Math.max(get_height(n.left),get_height(n.right));
+		}
+		return height;
+	}
+	
+	public static Node rotate_LL(Node parent){
+		Node child = parent.left;
+		parent.left = child.right;
+		child.right = parent;
+		return child;
+	}
+	public static Node rotate_RR(Node parent){
+		Node child = parent.right;
+		parent.right = child.left;
+		child.left = parent;
+		return child;
+	}
+	
+	public static Node rotate_LR(Node parent){
+		Node child = parent.left;
+		parent.left = rotate_RR(child);
+		return rotate_LL(parent);
+	}
+	
+	public static Node rotate_RL(Node parent){
+		Node child = parent.right;
+		parent.right = rotate_LL(child);
+		return rotate_RR(parent);
+	}
+
+	public static int get_balance(Node n){
+		if(n==null) return 0;
+		return get_height(n.left)-get_height(n.right);
+	}
+	
+	public static Node balance_tree(Node root){
+		int height_diff = get_balance(root);
+		
+		if(height_diff > 1){		//왼쪽 서브트리와 균형을 맞춘다
+			if(get_balance(root.left) > 0)
+				root = rotate_LL(root);
+			else
+				root = rotate_LR(root);
+		}
+		else if(height_diff < -1){	//오른쪽 서브트리와 균형을 맞춘다
+			if(get_balance(root.right) < 0)
+				root = rotate_RR(root);
+			else
+				root = rotate_RL(root);
+		}
+		return root;
+	}
+	
+	public static Node AVL_insert(int X, Node n){
+
+		if(n.Num>X){	//왼쪽노드추가
+			if(n.left==null)
+				n.left = new Node(X);
+			else{
+				n.left = AVL_insert(X,n.left);
+				n=balance_tree(n);
+			}
+		}
+		
+		else{		//오른쪽노드추가
+			if(n.right==null)
+				n.right= new Node(X);
+			else{
+				n.right = AVL_insert(X,n.right);
+				n=balance_tree(n);
+			}
+		}
+		return n;
+		
+	}
+	
+	public static void main(String[] args) {
+		int i;
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		n = new Node[N+1];
+		arr = new int[N+1];
+		
+		for(i=1;i<=N;i++){
+			arr[i]=sc.nextInt();
+			if(i==1)
+				root = new Node(arr[1]);
+			else
+				root = AVL_insert(arr[i],root);
+		}
+
+		print(root);
+		
+	}
+}

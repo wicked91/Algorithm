@@ -1,0 +1,58 @@
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class BOJ_DP_9252 {
+	
+	public static void main(String[] args) {
+		int i,j;
+		Stack<Character> stack = new Stack<Character>();
+		Scanner sc = new Scanner(System.in);
+		String str1 = sc.nextLine();
+		String str2 = sc.nextLine();
+		
+		int Result = 0;
+		
+		int L1 = str1.length();
+		int L2 = str2.length();
+		
+		int cache[][] = new int[L1+1][L2+1];
+		int x=L1, y=L2;
+		for(i=0;i<=L1;i++){
+			Arrays.fill(cache[i], 0);	
+		}
+		
+		for(i=1;i<=L1;i++){
+			for(j=1;j<=L2;j++){
+				if(str1.charAt(i-1)==str2.charAt(j-1))
+					cache[i][j]=cache[i-1][j-1]+1;
+				else
+					cache[i][j]=cache[i][j-1] > cache[i-1][j] ? cache[i][j-1] : cache[i-1][j];
+						
+				if(Result < cache[i][j]){
+					Result = cache[i][j];
+					x=i;	y=j;
+				}
+			}
+		}
+		System.out.println(Result);
+		
+		stack.push(str1.charAt(x-1));
+		--Result;
+		
+		for(i=x-1;i>0;i--){
+			for(j=y-1;j>0;j--){
+				if(cache[i][j]==Result && str1.charAt(i-1)==str2.charAt(j-1)){
+					stack.push(str1.charAt(i-1));
+					--Result;
+					--y;
+					break;
+				}
+			}
+		}
+		
+		while(!stack.isEmpty()){
+			System.out.print(stack.pop());
+		}
+	}
+}

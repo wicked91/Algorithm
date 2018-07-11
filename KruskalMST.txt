@@ -1,0 +1,82 @@
+import java.io.*;
+import java.util.*;
+
+class Elements implements Comparable<Elements>{
+	
+	int v;
+	int u;
+	int distance;
+	
+	Elements(int v, int u, int distance){
+		this.v=v;
+		this.u=u;
+		this.distance=distance;
+	}
+	
+	public int compareTo(Elements o){
+		return distance <= o.distance ? -1:1;
+	}
+	
+}
+
+class Main {
+
+	static int V,E;
+	static PriorityQueue<Elements> arr;
+	static int[] Parents;
+	static long ans =0;
+	
+	public static int Find(int X){
+		if(X==Parents[X])
+			return X;
+		else{
+			return Find(Parents[X]);
+		}
+	}
+	
+	public static void KruskalMST(){
+		
+		while(!arr.isEmpty()){
+			int X = Find(arr.peek().v);
+			int Y = Find(arr.peek().u);
+			int D = arr.peek().distance;
+			arr.poll();
+			
+			if(X==Y)
+				continue;
+			else{
+				Parents[X]=Y;
+				ans+=D;
+			}
+		}	
+	}
+	
+	
+    public static void main(String[] args) {
+    	int i,j;
+        Scanner sc = new Scanner(System.in);
+        V=sc.nextInt();
+        E=sc.nextInt();
+
+        Parents = new int[V];
+        arr = new PriorityQueue<Elements>();
+        
+        for(i=0;i<V;i++){
+        	Parents[i]=i;
+        }
+        
+        for(i=0;i<E;i++){
+        	int v = sc.nextInt();
+        	int u = sc.nextInt();
+        	int w = sc.nextInt();
+        	
+        	arr.offer(new Elements(v-1,u-1,w));
+        }
+        
+        KruskalMST();
+        System.out.println(ans);
+    }
+}
+
+
+

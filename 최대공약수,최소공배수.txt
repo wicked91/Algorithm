@@ -1,0 +1,14 @@
+// 재귀 호출을 이용하는 방법
+int gcd_recursion(int u, int v){
+    
+    if (v == 0){
+        return u;
+    }
+    else{
+        return gcd_recursion(v, u%v);
+    }
+}
+
+lcm(a,b) = a * b / gcd(a,b)
+
+출처: http://hyeonstorage.tistory.com/336 [개발이 하고 싶어요]

@@ -1,0 +1,87 @@
+import java.util.Scanner;
+import java.util.PriorityQueue;
+import java.util.Arrays;
+import java.util.Vector;
+
+class Element implements Comparable<Element>{
+	
+	int index;
+	int distance;
+	
+	Element(int index, int distance){
+		this.index = index;
+		this.distance = distance;		
+	}
+	public int compareTo(Element o){
+		return distance <= o.distance ? -1 : 1; 
+	}
+}
+
+public class BOJ_1753 {
+
+	static int V;
+	static int E;
+	static int K;
+	static final int inf = 100000;
+	static Vector<Element>[] Map ;
+	static int[] dist;
+	
+	public static void dijkstra(int Start){
+		PriorityQueue<Element> q = new PriorityQueue<Element>();
+		dist[Start]=0;
+		q.offer(new Element(Start,dist[Start]));
+		
+		while(!q.isEmpty()){
+			int I = q.peek().index;
+			int D = q.peek().distance;
+			q.poll();
+			
+			if(dist[I]<D)
+				continue;
+			
+			for(Element e : Map[I]){
+				int Target_Index = e.index;
+				int Target_Distance = e.distance;
+				if(dist[Target_Index]>dist[I]+Target_Distance){
+					dist[Target_Index]=dist[I]+Target_Distance;
+					q.offer(new Element(Target_Index,dist[Target_Index]));
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		int i,j;
+		Scanner sc = new Scanner(System.in);
+		V=sc.nextInt();
+		E=sc.nextInt();
+		K=sc.nextInt();//시작 정점
+		
+		Map = new Vector[V+1];
+		dist = new int[V+1];
+		
+		Arrays.fill(dist, inf);
+		
+		for(i=1;i<=V;i++){
+			Map[i]=new Vector<Element>();
+		}
+		
+		for(i=0;i<E;i++){
+			int u = sc.nextInt();
+			int v = sc.nextInt();
+			int w = sc.nextInt();
+			
+			Map[u].add(new Element(v,w));
+		}
+		
+		dijkstra(K);
+		
+		for(i=1;i<=V;i++){
+			if(dist[i]==inf)
+				System.out.println("INF");
+			else
+				System.out.println(dist[i]);
+		}
+		
+	}
+}

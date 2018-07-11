@@ -1,0 +1,52 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+	static int N, M, Current, ans;
+	static int adj[][];
+	static int Visited[];
+	static int Match[];;
+
+	public static int DFS(int K) {
+		int i;
+		if (Visited[K] == Current) {
+			return 0;
+		}
+		Visited[K] = Current;
+		for (i = 0; i < M; ++i) {
+			if (adj[K][i] == 1) {
+				if (Match[i] == -1 || DFS(Match[i]) > 0) {
+					Match[i] = K;
+					return 1;
+				}
+			}
+		}
+		return 0;
+	}
+
+	public static void main(String args[]) {
+		int i, j;
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		M = sc.nextInt();
+		adj = new int[N][M];
+		Visited = new int[N];
+		Match = new int[N];
+
+		Arrays.fill(Match, -1);
+
+		for (i = 0; i < N; i++) {
+			int K = sc.nextInt();
+			for (j = 0; j < K; j++) {
+				int X = sc.nextInt();
+				adj[i][X - 1] = 1;
+			}
+		}
+
+		for (i = 0; i < N; i++) {
+			++Current;
+			ans += DFS(i);
+		}
+		System.out.println(ans);
+	}
+}

@@ -1,0 +1,35 @@
+import java.util.Scanner;
+//슬라이딩 윈도우 방식으로 left와 right를 한칸씩 조절해 목표 합계의 구간 index를 구함
+public class Main {
+
+	static int N, M, Answer;
+	static int arr[];
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		M = sc.nextInt();	// 목표 합계
+		arr = new int[N];
+		for (int i = 0; i < N; i++) {
+			arr[i] = sc.nextInt();
+		}
+		sc.close();
+		Answer = 0;
+		int sum = 0;
+		int left = 0;	
+		int right = 0;
+
+		while (true) {
+			if (sum >= M) {	// 목표 합계 보다 sum이 커지면 밑에서 한자리 차감
+				sum -= arr[left++];
+			} else if (right == N) { // right포인터가 끝위치에 도달하면 종료
+				break;
+			} else { 		// 목표 합계 보다 sum이 작으면 위에서 한자리 추가
+				sum += arr[right++];
+			}
+			if (sum == M)	//목표 합계가 되면 Answer 증가
+				++Answer;
+		}
+		System.out.println(Answer);
+	}
+}

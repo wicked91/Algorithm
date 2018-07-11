@@ -1,0 +1,58 @@
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+class info{
+	int from;
+	int to;
+	info(int from, int to){
+		this.from=from;
+		this.to=to;
+	}
+}
+
+class Main {
+
+	static int N;
+	static long K;
+	static BigInteger T;
+	static Queue<info>  q;
+	public static void HanoiTower(int from, int mid, int to, int n){
+		if(n==1){
+			K++;
+			q.offer(new info(from, to));
+			//System.out.println(from +" " + to);
+		}
+		else{
+			HanoiTower(from,to,mid,n-1);
+			K++;
+			q.offer(new info(from, to));
+			//System.out.println(from +" " + to);
+			HanoiTower(mid,from,to,n-1);
+		}		
+	}
+	
+	public static void main(String args[]) throws IOException{
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		q = new LinkedList<info>();	
+		T = new BigInteger("1");
+		if(N<=20){
+			HanoiTower(1,2,3,N);
+			K = q.size();
+			System.out.println(K);
+			while(!q.isEmpty()){
+				System.out.println(q.peek().from + " "+q.peek().to);
+				q.poll();
+			}		
+		}
+		else{
+			for(int i=1;i<N;i++){
+				T=T.multiply(BigInteger.valueOf(2)).add(BigInteger.valueOf(1));
+			}
+			System.out.println(T);
+		}
+	}
+}
