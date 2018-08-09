@@ -1,38 +1,48 @@
-import java.util.*;
-class Solution {
-	
-	public static void print(int arr[], int k){
-		for(int i=0;i<k;i++){
-			if(i==k-1)
-				System.out.println(arr[i]);
-			else
-				System.out.print(arr[i]+" ");
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+class Main {
+
+	static int N, Answer;
+	static int arr[];
+
+	public static void swap(int a, int b) {
+		int temp = arr[a];
+		arr[a] = arr[b];
+		arr[b] = temp;
+	}
+
+	public static void Permutation(int n, int r, int depth) {
+		if (depth == r) {
+			for (int i = 1; i <= N; i++) {
+				System.out.print(arr[i] + " ");
+			}
+			System.out.println();
+		}
+
+		for (int i = depth; i <= n; i++) {
+			swap(i, depth);
+			Permutation(n, r, depth + 1);
+			swap(i, depth);
 		}
 	}
-	
-	public static void swap(int arr[], int i, int Depth){
-		int temp = arr[i];
-		arr[i]=arr[Depth];
-		arr[Depth]=temp;
-	}
-	
-	public static void Permutation(int arr[], int Depth, int n, int k){
-		
-		if(Depth==k){
-			print(arr,k);
-			return;
+
+	public static void main(String args[]) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+		arr = new int[N + 1];
+		Answer = 0;
+
+		int index = 1;
+		while (st.hasMoreTokens()) {
+			arr[index++] = Integer.parseInt(st.nextToken());
 		}
-		
-		for(int i=Depth;i<n;i++){
-			swap(arr,i,Depth);
-			Permutation(arr,Depth+1,n,k);
-			swap(arr,i,Depth);
-		}
-		
-	}
-	
-	public static void main(String args[]) throws Exception	{
-		int arr[] ={1,2,3,4};
-		Permutation(arr,0,4,4);
+
+		Permutation(N, N, 1);
+		System.out.println(Answer);
 	}
 }
