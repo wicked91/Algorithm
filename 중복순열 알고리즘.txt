@@ -1,0 +1,58 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, M, Answer;
+	static int ans[];
+	static ArrayList<Integer> arr;
+
+	public static void dpermutation(int start, int end) {
+
+		if (start == end) {
+			for (int i = 1; i <= end; i++) {
+				System.out.print(ans[i] + " ");
+			}
+			System.out.println();
+			return;
+		}
+
+		for (int i = 0; i < arr.size(); i++) {
+			/*
+			 * 내림차순 기준을 적용했을 떄 필요
+			if (ans[start] > arr.get(i))
+				continue;
+			*/
+			ans[start + 1] = arr.get(i);
+			dpermutation(start + 1, end);
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		arr = new ArrayList<Integer>();
+		ans = new int[N + 1];
+
+		st = new StringTokenizer(br.readLine(), " ");
+		while (st.hasMoreTokens()) {
+			arr.add(Integer.parseInt(st.nextToken()));
+		}
+
+		Collections.sort(arr, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				return o2 > o1 ? -1 : 1;
+			}
+		});
+
+		dpermutation(0, M);
+	}
+}
